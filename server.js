@@ -21,7 +21,26 @@ app.get('/', (req, res) => {
 })
 
 app.get('/pokemon', (req, res) => {
-	const sql = 'select * from Pokemon'
+	const sql = `SELECT 
+	P.PokemonName, 
+	T.TypeName, 
+	P.NextEvolutionID, 
+	P.Height, 
+	P.Weight,
+	P.PokemonImageURL,
+	G.GameName,
+	G.GameImageURL,
+	R.Generation,
+	R.RegionName,
+	R.RegionDescription,
+	R.RegionImageURL
+	
+	FROM Pokemon AS P 
+	JOIN Type AS T ON P.TypeID = T.TypeID
+	JOIN PokemonGame AS PG ON P.PokemonID = PG.PokemonID
+	JOIN Game AS G ON PG.GameID = G.GameID
+	JOIN RegionGame AS RG ON G.GameID = RG.GameID
+	JOIN Region AS R ON RG.RegionID = R.RegionID`
 
 	db.query(sql,(err,rows) => {
 		if(err) {
