@@ -29,7 +29,7 @@ app.get('/pokemon', (req, res) => {
 			return console.log(err)
 		}
 		res.json(rows)
-	}
+	})
 })
 
 	
