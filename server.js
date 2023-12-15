@@ -22,26 +22,24 @@ app.get('/', (req, res) => {
 
 app.get('/pokemon', (req, res) => {
 	const sql = `SELECT 
-	P.PokemonName, 
-	T.TypeName, 
-	P.NextEvolutionID, 
-	P.Height, 
+SELECT 
+    P.PokemonName, 
+    T.TypeName,
+	P.NextEvolutionID,
+	P.Height
 	P.Weight,
-	-- P.PokemonImageURL,
-	G.GameName AS GameNames,
-	-- G.GameImageURL AS GameURLs,
-	R.Generation,
+	R.RegionImageURL,
 	R.RegionName,
-	R.RegionDescription,
-	R.RegionImageURL
-	
+	GROUP_CONCAT(DISTINCT G.GameName) AS GameNames,
+	GROUP_CONCAT(DISTINCT G.GameImageURL) AS GameImageURLs
 	FROM Pokemon AS P 
 	JOIN Type AS T ON P.TypeID = T.TypeID
 	JOIN PokemonGame AS PG ON P.PokemonID = PG.PokemonID
 	JOIN Game AS G ON PG.GameID = G.GameID
 	JOIN RegionGame AS RG ON G.GameID = RG.GameID
-	JOIN Region AS R ON RG.RegionID = R.RegionID`
-
+	JOIN Region AS R ON RG.RegionID = R.RegionID
+	GROUP BY P.PokemonName, T.TypeName, R.RegionName
+`
 	db.query(sql,(err,rows) => {
 		if(err) {
 			res.json({result: "error"})
