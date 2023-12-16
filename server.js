@@ -21,24 +21,22 @@ app.get('/', (req, res) => {
 })
 
 app.get('/pokemon', (req, res) => {
-	const sql = `SELECT 
+	const sql = `
 SELECT 
-    P.PokemonName, 
-    T.TypeName,
-	P.NextEvolutionID,
-	P.Height
-	P.Weight,
-	R.RegionImageURL,
-	R.RegionName,
-	GROUP_CONCAT(DISTINCT G.GameName) AS GameNames,
-	GROUP_CONCAT(DISTINCT G.GameImageURL) AS GameImageURLs
-	FROM Pokemon AS P 
-	JOIN Type AS T ON P.TypeID = T.TypeID
-	JOIN PokemonGame AS PG ON P.PokemonID = PG.PokemonID
-	JOIN Game AS G ON PG.GameID = G.GameID
-	JOIN RegionGame AS RG ON G.GameID = RG.GameID
-	JOIN Region AS R ON RG.RegionID = R.RegionID
-	GROUP BY P.PokemonName, T.TypeName, R.RegionName
+    P.pokemonName, 
+    P.nextEvolutionID, 
+    P.height, 
+    P.weight, 
+    P.description, 
+    P.pokemonImageURL, 
+    T.typeName, 
+    T.typeImageURL
+FROM 
+    Pokemon P
+JOIN 
+    PokemonType PT ON P.pokemonID = PT.pokemonID
+JOIN 
+    Type T ON PT.typeID = T.typeID 
 `
 	db.query(sql,(err,rows) => {
 		if(err) {
