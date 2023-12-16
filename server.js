@@ -29,14 +29,16 @@ SELECT
     P.weight, 
     P.description, 
     P.pokemonImageURL, 
-    T.typeName, 
-    T.typeImageURL
+    GROUP_CONCAT(T.typeName) AS typeNames, 
+    GROUP_CONCAT(T.typeImageURL) AS typeImageURLs
 FROM 
     Pokemon P
 JOIN 
     PokemonType PT ON P.pokemonID = PT.pokemonID
 JOIN 
-    Type T ON PT.typeID = T.typeID 
+    Type T ON PT.typeID = T.typeID
+GROUP BY 
+    P.pokemonID
 `
 	db.query(sql,(err,rows) => {
 		if(err) {
