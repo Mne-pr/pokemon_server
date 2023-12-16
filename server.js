@@ -10,7 +10,7 @@ const db = mysql.createConnection({
     port: 30773,
 	user: 'root',
 	password: 'mysql1234',
-	database: 'PokemonStarting',
+	database: 'pokedex',
 })
 
 db.connect()
